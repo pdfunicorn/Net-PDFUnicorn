@@ -4,6 +4,25 @@ use strict;
 use 5.008_005;
 our $VERSION = '0.01';
 
+use Net::PDFUnicorn::UserAgent;
+use Net::PDFUnicorn::Documents;
+use Net::PDFUnicorn::Images;
+
+sub new {
+    my($class, %args) = @_;    
+    my $ua = Net::PDFUnicorn::UserAgent->new(%args);    
+    bless { ua => $ua }, $class;
+}
+
+sub documents {
+    Net::PDFUnicorn::Documents->new( ua => shift->{ua} );
+}
+
+sub images {
+    Net::PDFUnicorn::Images->new( ua => shift->{ua} );
+}
+
+
 1;
 __END__
 
@@ -11,7 +30,7 @@ __END__
 
 =head1 NAME
 
-Net::PDFUnicorn - Blah blah blah
+Net::PDFUnicorn - API Client for PDFUnicorn
 
 =head1 SYNOPSIS
 
@@ -19,7 +38,7 @@ Net::PDFUnicorn - Blah blah blah
 
 =head1 DESCRIPTION
 
-Net::PDFUnicorn is
+Net::PDFUnicorn is a client for the PDFUnicorn API.
 
 =head1 AUTHOR
 
