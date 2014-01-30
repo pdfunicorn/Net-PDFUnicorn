@@ -16,6 +16,23 @@ my $client = Net::PDFUnicorn->new(
 
 ok $client;
 
+
+# create image and get image meta-data
+try {
+    my $img1 = $client->images->create({
+        file => 't/unicorn_48.png',
+        src => '/stock/logo.png',
+    });
+    
+    is($img1->{src}, "stock/logo.png", "src ok");
+    ok($img1->{id}, "id ok");
+    ok($img1->{uri}, "uri ok");
+    ok($img1->{created}, "created ok");
+} catch {
+    die ">>> ".Data::Dumper->Dumper($_);    
+};
+
+
 # try to create a doc without providing source
 my $doc;
 
@@ -75,6 +92,9 @@ my $doc2 = $client->documents->create({
     source => '<doc><page>Hello World!</page></doc>',
 }, { pdf => 1 });
 ok($doc2 =~ /^%PDF/, 'doc is a PDF');
+
+
+
 
 
 done_testing;

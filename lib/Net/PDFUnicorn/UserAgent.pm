@@ -10,6 +10,7 @@ use HTTP::Headers;
 use HTTP::Request;
 use Data::Dumper;
 use JSON;
+use Try;
 
 use Net::PDFUnicorn::Exceptions;
 
@@ -50,6 +51,23 @@ sub post {
     }
 }
 
+sub upload {
+    my ($self, $path, $data) = @_;
+    my $res = $self->{lwp}->post(
+        $self->{host} . $path,
+        [
+            src => $data->{src},
+            file => [$data->{file}]
+        ],
+        Content_Type => 'form-data',
+    );
+    if ($res->is_success) { # 200 OK
+        return $res->decoded_content;
+    } else {
+        $self->throw_exception($res);
+    }
+}
+
 sub get {
     my ($self, $path, $opts) = @_;
     my $res = $self->{lwp}->get($self->{host} . $path);
@@ -63,8 +81,18 @@ sub get {
 
 sub throw_exception {
     my ($self, $res) = @_;
+    
+    #warn "throw_exception res: ".Data::Dumper->Dumper($res);
+    
     my $code = $res->code;
-    my $content = from_json($res->content) if $res->content;
+    my $content;
+    
+    try {
+        $content = from_json($res->content) if $res->content;
+    } catch {
+        $content = { errors => $res->content } if $res->content;
+    };
+    
     if ($code == 503){
         PDFU::TemporaryError->throw(
             code => $code,
@@ -74,17 +102,19 @@ sub throw_exception {
     } elsif ($code == 422){
         PDFU::InvalidRequestError->throw(
             code => $code,
-            errors => $content ? $content->{errors} : $res->{error}
+            errors => $content ? $content->{errors} : $res->message
         );
     } elsif ($code == 401){
         PDFU::AuthenticationError->throw(
             code => $code,
-            errors => $content ? $content->{errors} : $res->{error}
+            errors => $content ? $content->{errors} : $res->message
         );
     } else {
+        warn "##############";
+        warn "PDFU::PDFUnicornError->throw: ".Data::Dumper->Dumper($content);
         PDFU::PDFUnicornError->throw(
             code => $code,
-            errors => $content ? $content->{errors} : $res->{error}
+            errors => $content ? $content->{errors} : $res->message
         );
     }
 }
