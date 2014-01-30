@@ -1,7 +1,7 @@
 {
-   "abstract" : "Blah blah blah",
+   "abstract" : "API Client for PDFUnicorn",
    "author" : [
-      "Jason Galea <lecstor@cpan.org>"
+      "Jason Galea <jason@pdfunicorn.com>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Dist::Milla version v1.0.4, Dist::Zilla version 5.006, CPAN::Meta::Converter version 2.132830",
@@ -36,16 +36,39 @@
       },
       "runtime" : {
          "requires" : {
+            "Exception::Class" : "0",
+            "HTTP::Headers" : "0",
+            "HTTP::Request" : "0",
+            "JSON" : "0",
+            "LWP::Protocol::https" : "0",
+            "LWP::UserAgent" : "0",
+            "MIME::Base64" : "0",
+            "Try" : "0",
             "perl" : "5.008005"
          }
       },
       "test" : {
          "requires" : {
-            "Test::More" : "0.88"
+            "Test::More" : "0.88",
+            "Try" : "0"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.01"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/pdfunicorn/Net-PDFUnicorn/issues"
+      },
+      "homepage" : "https://github.com/pdfunicorn/Net-PDFUnicorn",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/pdfunicorn/Net-PDFUnicorn.git",
+         "web" : "https://github.com/pdfunicorn/Net-PDFUnicorn"
+      }
+   },
+   "version" : "0.01",
+   "x_contributors" : [
+      "Jason Galea <jason@lecstor.com>"
+   ]
 }
 
