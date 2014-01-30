@@ -8,13 +8,13 @@ use Try;
 
 my $API_KEY = $ENV{PDFUNICORN_API_KEY};
 
-ok $API_KEY;
+ok $API_KEY, 'api key set';
 
 my $client = Net::PDFUnicorn->new(
     api_key => $API_KEY,
 );
 
-ok $client;
+ok $client, 'client ok';
 
 
 # create image and get image meta-data
@@ -36,26 +36,24 @@ try{
     $doc = $client->documents->create({});
 } catch {
     my $ex = $_;
-    ok $ex->isa('PDFU::InvalidRequestError');
+    ok $ex->isa('PDFU::InvalidRequestError'), 'exception isa InvalidRequestError';
+    is_deeply $ex->errors, ['Document - Missing required attribute value: "source"'], 'errors correct';
     #warn Data::Dumper->Dumper($exception);
 };
-
-#ok $doc->{errors};
-#is $doc->{errors}[0], 'Document - Missing required attribute value: "source"';
 
 
 # create doc and get binary
 
 my $doc2 = $client->documents->create({
-    source => '<doc><page>Hello World!</page></doc>',
+    source => '<doc><page>Hello World! <img src="stock/logo.png" /></page></doc>',
 }, { pdf => 1 });
 ok($doc2 =~ /^%PDF/, 'doc is a PDF');
 
 
 # create doc and get metadata
 
-$doc = $client->documents->create({source => '<doc size="b5"><page>Hello World!</page></doc>'});
-is($doc->{source}, '<doc size="b5"><page>Hello World!</page></doc>', "source ok");
+$doc = $client->documents->create({source => '<doc size="b5"><page>Hello World! <img src="stock/logo.png" /></page></doc>'});
+is($doc->{source}, '<doc size="b5"><page>Hello World! <img src="stock/logo.png" /></page></doc>', "source ok");
 ok($doc->{id}, "id ok");
 ok($doc->{uri}, "uri ok");
 ok($doc->{created}, "created ok");
@@ -65,7 +63,7 @@ ok(!$doc->{file}, "file ok");
 # fetch doc metadata
 
 my $doc3 = $client->documents->fetch($doc);
-is($doc3->{source}, '<doc size="b5"><page>Hello World!</page></doc>', "source ok");
+is($doc3->{source}, '<doc size="b5"><page>Hello World! <img src="stock/logo.png" /></page></doc>', "source ok");
 ok($doc3->{id}, "id ok");
 ok($doc3->{uri}, "uri ok");
 ok($doc3->{created}, "created ok");
@@ -80,16 +78,6 @@ ok($doc4 =~ /^%PDF/, 'doc is a PDF');
 # and again
 my $doc5 = $client->documents->fetch($doc, { pdf => 1, retry_for => 30 });
 ok($doc5 =~ /^%PDF/, 'doc is a PDF');
-
-
-# create doc and get binary
-
-my $doc2 = $client->documents->create({
-    source => '<doc><page>Hello World!</page></doc>',
-}, { pdf => 1 });
-ok($doc2 =~ /^%PDF/, 'doc is a PDF');
-
-
 
 
 
