@@ -9,7 +9,8 @@ use Net::PDFUnicorn::Documents;
 use Net::PDFUnicorn::Images;
 
 sub new {
-    my($class, %args) = @_;    
+    my($class, %args) = @_;
+    die '!! We need an api key !!' unless $args{api_key};
     my $ua = Net::PDFUnicorn::UserAgent->new(%args);    
     bless { ua => $ua }, $class;
 }
