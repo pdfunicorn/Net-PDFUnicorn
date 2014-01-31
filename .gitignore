@@ -7,3 +7,5 @@ MYMETA.*
 /.prove
 /.project
 /local
+/do_release
+/do_test
