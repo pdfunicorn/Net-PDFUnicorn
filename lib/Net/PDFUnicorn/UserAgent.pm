@@ -79,6 +79,16 @@ sub get {
     }
 }
 
+sub delete {
+    my ($self, $path) = @_;
+    my $res = $self->{lwp}->delete($self->{host} . $path);
+    if ($res->is_success) { # 200 OK
+        return { 'ok' => 1 };
+    } else {
+        $self->throw_exception($res);
+    }
+}
+
 sub throw_exception {
     my ($self, $res) = @_;
     
@@ -109,9 +119,12 @@ sub throw_exception {
             code => $code,
             errors => $content ? $content->{errors} : $res->message
         );
+    } elsif ($code == 404){
+        PDFU::NotFound->throw(
+            code => $code,
+            errors => ['Resource Not Found']
+        );
     } else {
-        warn "##############";
-        warn "PDFU::PDFUnicornError->throw: ".Data::Dumper->Dumper($content);
         PDFU::PDFUnicornError->throw(
             code => $code,
             errors => $content ? $content->{errors} : $res->message
