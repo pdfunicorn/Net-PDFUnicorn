@@ -19,6 +19,19 @@ sub create {
     return from_json($res);
 }
 
+sub delete {
+    my ($self, $doc) = @_;
+    my $path = '/v1/images/' . $doc->{id};
+    my $res = $self->{ua}->delete($path);
+    return $res;
+}
+
+sub fetch {
+    my ($self, $doc) = @_;
+    my $path = '/v1/images/' . $doc->{id};
+    my $res = $self->{ua}->get($path);
+    return $res;
+}
 
 1;
 __END__
