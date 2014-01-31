@@ -50,6 +50,15 @@ sub fetch {
     return $fetch_pdf ? $res : from_json($res);
 }
 
+sub delete {
+    my ($self, $doc) = @_;
+    my $path = '/v1/documents/' . $doc->{id};
+    my $res = $self->{ua}->delete($path);
+    return $res;
+}
+
+
+
 1;
 __END__
 
