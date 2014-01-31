@@ -18,15 +18,15 @@ ok $client, 'client ok';
 
 
 # create image and get image meta-data
-my $img1 = $client->images->create({
+my $image = $client->images->create({
     file => 't/unicorn_48.png',
     src => '/stock/logo.png',
 });
 
-is($img1->{src}, "stock/logo.png", "src ok");
-ok($img1->{id}, "id ok");
-ok($img1->{uri}, "uri ok");
-ok($img1->{created}, "created ok");
+is($image->{src}, "stock/logo.png", "src ok");
+ok($image->{id}, "id ok");
+ok($image->{uri}, "uri ok");
+ok($image->{created}, "created ok");
 
 
 # try to create a doc without providing source
@@ -80,5 +80,31 @@ my $doc5 = $client->documents->fetch($doc, { pdf => 1, retry_for => 30 });
 ok($doc5 =~ /^%PDF/, 'doc is a PDF');
 
 
+# delete document
+
+ok $client->documents->delete($doc), 'delete document';
+
+
+# delete image
+
+ok $client->images->delete($image), 'delete image';
+
+
+# get deleted document
+
+try {
+    $client->documents->fetch($doc);
+} catch {
+    ok $_->isa('PDFU::NotFound');
+}
+
+
+# get deleted image
+
+try {
+    $client->images->fetch($image);
+} catch {
+    ok $_->isa('PDFU::NotFound');
+}
 
 done_testing;
