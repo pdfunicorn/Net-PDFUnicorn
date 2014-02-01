@@ -37,6 +37,8 @@ Net::PDFUnicorn - API Client for PDFUnicorn
 
     use Net::PDFUnicorn;
     
+    my $API_KEY = $ENV{PDFUNICORN_API_KEY};
+    
     my $client = Net::PDFUnicorn->new(
         api_key => $API_KEY,
     );

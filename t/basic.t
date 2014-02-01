@@ -5,6 +5,9 @@ use Net::PDFUnicorn;
 use Data::Dumper;
 use Try;
 
+# run test with:
+#
+# PDFUNICORN_API_KEY=[Your-API-Key] prove -lv t
 
 my $API_KEY = $ENV{PDFUNICORN_API_KEY};
 
