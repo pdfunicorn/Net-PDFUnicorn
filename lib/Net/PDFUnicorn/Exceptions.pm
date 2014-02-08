@@ -7,6 +7,7 @@ our $VERSION = '0.01';
 use Exception::Class (
     'PDFU::Exception' => {
         fields => [ 'code', 'errors' ],
+        description => 'Unexpected Error',
 #        alias  => 'throw_fields',
     },
 

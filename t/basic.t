@@ -1,4 +1,5 @@
 use strict;
+use warnings;
 use Test::More;
 use Net::PDFUnicorn;
 
@@ -16,6 +17,27 @@ my $PORT = $ENV{PDFUNICORN_PORT};
 ok $API_KEY, 'api key set';
 
 my $client = Net::PDFUnicorn->new(
+    api_key => 'bogus-api-key',
+    host => $HOST || 'localhost',
+    port => $PORT || 3000,
+);
+ok $client, 'client';
+
+my $doc;
+
+# try to create a doc with bogus api key
+
+try{
+    $doc = $client->documents->create({});
+} catch {
+    my $ex = $_;
+    ok $ex->isa('PDFU::AuthenticationError'), 'exception isa AuthenticationError';
+    is $ex->message, 'Authentication Error', 'error message';
+    is_deeply $ex->errors, ['Sorry, the API-Key you provided is invalid'], 'doc errors correct';
+    #warn Data::Dumper->Dumper($exception);
+};
+
+$client = Net::PDFUnicorn->new(
     api_key => $API_KEY,
     host => $HOST || 'localhost',
     port => $PORT || 3000,
@@ -23,28 +45,26 @@ my $client = Net::PDFUnicorn->new(
 
 ok $client, 'client';
 
-
 # create image and get image meta-data
 my $image = $client->images->create({
     file => 't/unicorn_48.png',
     src => '/stock/logo.png',
 });
-
 is($image->{src}, "stock/logo.png", "image src");
 ok($image->{id}, "image id");
 ok($image->{uri}, "image uri");
 ok($image->{created}, "image created");
 
 
-# try to create a doc without providing source
-my $doc;
+# try to create a doc without providing source, template, or template_id
 
 try{
     $doc = $client->documents->create({});
 } catch {
     my $ex = $_;
     ok $ex->isa('PDFU::InvalidRequestError'), 'exception isa InvalidRequestError';
-    is_deeply $ex->errors, ['Document - Missing required attribute value: "source"'], 'doc errors correct';
+    is $ex->message, 'Invalid Request Error', 'error message';
+    is_deeply $ex->errors, ['Require attribute, one of: source, template, template_id'], 'doc errors correct';
     #warn Data::Dumper->Dumper($exception);
 };
 
@@ -77,6 +97,36 @@ ok($doc3->{uri}, "doc uri");
 ok($doc3->{created}, "doc created");
 ok(!$doc3->{file}, "doc file");
 
+# try to create doc and fetch from non-existent template
+
+$doc = $client->documents->create({
+    template_id => '52f230afb9efb77ded0b0000',
+});
+
+try{
+    $doc = $client->documents->fetch($doc, { pdf => 1 });
+} catch {
+    my $ex = $_;
+    ok $ex->isa('PDFU::InvalidRequestError'), 'exception isa InvalidRequestError';
+    is $ex->message, 'Invalid Request Error', 'error message';
+    is_deeply $ex->errors, ['The requested document template was not found'], 'doc errors correct';
+    #warn Data::Dumper->Dumper($exception);
+};
+
+
+# try to create doc and get binary from non-existent template
+
+try{
+    $doc = $client->documents->create({
+        template_id => '52f230afb9efb77ded0b0000',
+    }, { pdf => 1 });
+} catch {
+    my $ex = $_;
+    ok $ex->isa('PDFU::InvalidRequestError'), 'exception isa InvalidRequestError';
+    is $ex->message, 'Invalid Request Error', 'error message';
+    is_deeply $ex->errors, ['The requested document template was not found'], 'doc errors correct';
+    #warn Data::Dumper->Dumper($exception);
+};
 
 # create template
 

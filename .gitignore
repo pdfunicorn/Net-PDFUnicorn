@@ -8,4 +8,4 @@ MYMETA.*
 /.project
 /local
 /do_release
-/do_test
+/do_test*

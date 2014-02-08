@@ -106,28 +106,31 @@ sub throw_exception {
     if ($code == 503){
         PDFU::TemporaryError->throw(
             code => $code,
-            message => $res->message,
+            error => $res->message,
             retry_after => $res->header('retry-after')
         );
     } elsif ($code == 422){
         PDFU::InvalidRequestError->throw(
             code => $code,
-            errors => $content ? $content->{errors} : $res->message
+            error => $content->{message} || $res->message,
+            errors => $content->{errors}
         );
     } elsif ($code == 401){
         PDFU::AuthenticationError->throw(
             code => $code,
-            errors => $content ? $content->{errors} : $res->message
+            error => $content->{message} || $res->message,
+            errors => $content->{errors}
         );
     } elsif ($code == 404){
         PDFU::NotFound->throw(
             code => $code,
-            errors => ['Resource Not Found']
+            error => $res->message,
+            errors => $content->{errors}
         );
     } else {
         PDFU::PDFUnicornError->throw(
             code => $code,
-            errors => $content ? $content->{errors} : $res->message
+            error => $res->message,
         );
     }
 }
