@@ -33,7 +33,7 @@ sub new {
     
     bless {
         lwp => $lwp,
-        host => $port == 443 ? "https://$host" : "http://$host",
+        host => $port == 443 ? "https://$host" : $port == 80 ? "http://$host" : "http://$host:$port",
     }, $class;
 }
 
@@ -42,7 +42,7 @@ sub post {
     my $req = HTTP::Request->new(POST => $self->{host} . $path);
     $req->content_type('application/json');
     $req->content($data);
-    
+
     my $res = $self->{lwp}->request($req);
     if ($res->is_success) { # 200 OK
         return $res->decoded_content;
