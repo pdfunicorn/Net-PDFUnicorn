@@ -37,7 +37,7 @@ sub fetch {
             my $ex = $_;
             die $ex unless blessed $ex && $ex->can('rethrow');
             if ($ex->code == 503 && $opts->{retry_for}){
-                warn sprintf "rethrow if %s - %s (%s) > %s", time, $start, time-$start, $opts->{retry_for};
+                #warn sprintf "rethrow if %s - %s (%s) > %s", time, $start, time-$start, $opts->{retry_for};
                 $ex->rethrow if time - $start > $opts->{retry_for};
                 sleep($ex->retry_after || 5);
                 $ex->rethrow if time - $start > $opts->{retry_for};

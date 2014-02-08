@@ -6,6 +6,7 @@ our $VERSION = '0.01';
 
 use Net::PDFUnicorn::UserAgent;
 use Net::PDFUnicorn::Documents;
+use Net::PDFUnicorn::Templates;
 use Net::PDFUnicorn::Images;
 
 sub new {
@@ -17,6 +18,10 @@ sub new {
 
 sub documents {
     Net::PDFUnicorn::Documents->new( ua => shift->{ua} );
+}
+
+sub templates {
+    Net::PDFUnicorn::Templates->new( ua => shift->{ua} );
 }
 
 sub images {
@@ -43,20 +48,42 @@ Net::PDFUnicorn - API Client for PDFUnicorn
         api_key => $API_KEY,
     );
 
+    # create (upload) an image
+    
+    # file is the file path to the local image.
+    # src is the path that will be used in the document image tag to reference
+    # the image.
+
     my $image_metadata = $client->images->create({
         file => 't/unicorn_48.png',
         src => '/stock/logo.png',
     });
 
-    my $pdf_file = $client->documents->create({
-        source => '<doc><page>Hello World! <img src="stock/logo.png" /></page></doc>',
-    }, { pdf => 1 });
+    # create a document from source and fetch
 
     my $doc_meta = $client->documents->create({
         source => '<doc size="b5"><page>Hello World! <img src="stock/logo.png" /></page></doc>'
     });
+
+    my $pdf_file = $client->documents->fetch($doc_meta);
+
+    # create a document from source and fetch in a single request
     
-    my $pdf_file2 = $client->documents->fetch($doc_meta);
+    my $pdf_file = $client->documents->create({
+        source => '<doc><page>Hello World! <img src="stock/logo.png" /></page></doc>',
+    }, { pdf => 1 });
+
+    # create a document from template and data
+
+    my $template = $client->templates->create({
+        source => '<doc><page>Hello World! <img src="[% logo_image %]" /></page></doc>',
+    });
+    
+    my $pdf_file = $client->documents->create({
+        template_id => $template->{id},
+        data => { logo_image => "stock/logo.png" },
+    }, { pdf => 1 });
+    
     
 
 =head1 DESCRIPTION
