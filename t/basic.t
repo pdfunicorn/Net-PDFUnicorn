@@ -128,7 +128,8 @@ try{
 
 # create template
 
-my $tmpl = $client->templates->create({ 
+my $tmpl = $client->templates->create({
+    name => 'Testy Test Template 01',
     source => '<doc size="b5"><page>Hello World! <img src="[% logo %]" /></page></doc>'
 });
 is($tmpl->{source}, '<doc size="b5"><page>Hello World! <img src="[% logo %]" /></page></doc>', "template source");
