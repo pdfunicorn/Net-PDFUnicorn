@@ -6,43 +6,6 @@ DISTRIBUTIONS
       Class::Data::Inheritable 0.08
     requirements:
       ExtUtils::MakeMaker 0
-  Devel-CallChecker-0.006
-    pathname: Z/ZE/ZEFRAM/Devel-CallChecker-0.006.tar.gz
-    provides:
-      Devel::CallChecker 0.006
-    requirements:
-      DynaLoader 0
-      DynaLoader::Functions 0.001
-      Exporter 0
-      ExtUtils::CBuilder 0.15
-      ExtUtils::ParseXS 0
-      File::Spec 0
-      IO::File 1.03
-      Module::Build 0
-      Test::More 0
-      parent 0
-      perl 5.006
-      strict 0
-      warnings 0
-  Devel-CallParser-0.002
-    pathname: Z/ZE/ZEFRAM/Devel-CallParser-0.002.tar.gz
-    provides:
-      Devel::CallParser 0.002
-    requirements:
-      Devel::CallChecker 0.002
-      DynaLoader 0
-      DynaLoader::Functions 0.001
-      Exporter 0
-      ExtUtils::CBuilder 0.15
-      ExtUtils::ParseXS 0
-      File::Spec 0
-      IO::File 1.03
-      Module::Build 0
-      Test::More 0
-      parent 0
-      perl 5.011002
-      strict 0
-      warnings 0
   Devel-StackTrace-1.31
     pathname: D/DR/DROLSKY/Devel-StackTrace-1.31.tar.gz
     provides:
@@ -53,20 +16,6 @@ DISTRIBUTIONS
       File::Spec 0
       Scalar::Util 0
       overload 0
-      strict 0
-      warnings 0
-  DynaLoader-Functions-0.002
-    pathname: Z/ZE/ZEFRAM/DynaLoader-Functions-0.002.tar.gz
-    provides:
-      DynaLoader::Functions 0.002
-    requirements:
-      Carp 0
-      DynaLoader 0
-      Exporter 0
-      Module::Build 0
-      Test::More 0
-      parent 0
-      perl 5.006
       strict 0
       warnings 0
   Encode-Locale-1.03
@@ -260,14 +209,14 @@ DISTRIBUTIONS
       File::Temp 0
       Scalar::Util 0
       Test::More 0.88
-  IO-Socket-SSL-1.966
-    pathname: S/SU/SULLR/IO-Socket-SSL-1.966.tar.gz
+  IO-Socket-SSL-1.967
+    pathname: S/SU/SULLR/IO-Socket-SSL-1.967.tar.gz
     provides:
-      IO::Socket::SSL 1.966
+      IO::Socket::SSL 1.967
       IO::Socket::SSL::Intercept 1.93
-      IO::Socket::SSL::SSL_Context 1.966
-      IO::Socket::SSL::SSL_HANDLE 1.966
-      IO::Socket::SSL::Session_Cache 1.966
+      IO::Socket::SSL::SSL_Context 1.967
+      IO::Socket::SSL::SSL_HANDLE 1.967
+      IO::Socket::SSL::Session_Cache 1.967
       IO::Socket::SSL::Utils 0.02
     requirements:
       ExtUtils::MakeMaker 0
@@ -301,10 +250,10 @@ DISTRIBUTIONS
       Mozilla::CA 20110101
       Net::HTTPS 6
       perl 5.008001
-  Module-Build-Tiny-0.034
-    pathname: L/LE/LEONT/Module-Build-Tiny-0.034.tar.gz
+  Module-Build-Tiny-0.035
+    pathname: L/LE/LEONT/Module-Build-Tiny-0.035.tar.gz
     provides:
-      Module::Build::Tiny 0.034
+      Module::Build::Tiny 0.035
     requirements:
       CPAN::Meta 0
       DynaLoader 0
@@ -411,25 +360,6 @@ DISTRIBUTIONS
       Test::Harness 3.30
     requirements:
       ExtUtils::MakeMaker 0
-  Try-0.03
-    pathname: D/DO/DOY/Try-0.03.tar.gz
-    provides:
-      Error1 undef
-      Error2 undef
-      Try 0.03
-      inc::MakeMaker undef
-    requirements:
-      Devel::CallParser 0
-      Exporter 0
-      ExtUtils::MakeMaker 6.30
-      File::Find 0
-      File::Temp 0
-      Test::More 0.88
-      Try::Tiny 0
-      XSLoader 0
-      perl 5.014
-      strict 0
-      warnings 0
   Try-Tiny-0.19
     pathname: D/DO/DOY/Try-Tiny-0.19.tar.gz
     provides:
