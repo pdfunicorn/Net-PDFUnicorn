@@ -4,7 +4,7 @@ use Test::More;
 use Net::PDFUnicorn;
 
 use Data::Dumper;
-use Try;
+use Try::Tiny;
 
 # run test with:
 #
@@ -184,7 +184,7 @@ try {
     $client->documents->fetch($doc);
 } catch {
     ok $_->isa('PDFU::NotFound'), 'doc not found';
-}
+};
 
 
 # get deleted image
@@ -193,6 +193,6 @@ try {
     $client->images->fetch($image);
 } catch {
     ok $_->isa('PDFU::NotFound'), 'image not found';
-}
+};
 
 done_testing;
