@@ -32,9 +32,7 @@ try{
 } catch {
     my $ex = $_;
     ok $ex->isa('PDFU::AuthenticationError'), 'exception isa AuthenticationError';
-    is $ex->message, 'Authentication Error', 'error message';
-    is_deeply $ex->errors, ['Sorry, the API-Key you provided is invalid'], 'doc errors correct';
-    #warn Data::Dumper->Dumper($exception);
+    is $ex->message, 'Invalid API key provided', 'error message';
 };
 
 $client = Net::PDFUnicorn->new(
@@ -63,7 +61,7 @@ try{
 } catch {
     my $ex = $_;
     ok $ex->isa('PDFU::InvalidRequestError'), 'exception isa InvalidRequestError';
-    is $ex->message, 'Invalid Request Error', 'error message';
+    is $ex->message, 'Invalid parameters in request', 'error message';
     is_deeply $ex->errors, ['Require attribute, one of: source, template, template_id'], 'doc errors correct';
     #warn Data::Dumper->Dumper($exception);
 };

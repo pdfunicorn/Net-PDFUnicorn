@@ -9,10 +9,10 @@ requires 'MIME::Base64';
 requires 'HTTP::Headers';
 requires 'HTTP::Request';
 requires 'Exception::Class';
-requires 'Try';
+requires 'Try::Tiny';
 
 
 on test => sub {
     requires 'Test::More', '0.88';
-    requires 'Try';
+    requires 'Try::Tiny';
 };

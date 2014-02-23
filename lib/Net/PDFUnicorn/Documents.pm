@@ -2,10 +2,9 @@ package Net::PDFUnicorn::Documents;
 
 use strict;
 use 5.008_005;
-our $VERSION = '0.01';
 
 use JSON;
-use Try;
+use Try::Tiny;
 use Scalar::Util qw( blessed );
 
 
@@ -44,7 +43,7 @@ sub fetch {
             } else {
                 $ex->rethrow;
             }
-        }
+        };
         last if $res;
     }    
     return $fetch_pdf ? $res : from_json($res);

@@ -8,9 +8,8 @@ use LWP::UserAgent;
 use MIME::Base64 qw/encode_base64/;
 use HTTP::Headers;
 use HTTP::Request;
-use Data::Dumper;
 use JSON;
-use Try;
+use Try::Tiny;
 
 use Net::PDFUnicorn::Exceptions;
 
@@ -71,7 +70,6 @@ sub upload {
 sub get {
     my ($self, $path, $opts) = @_;
     my $res = $self->{lwp}->get($self->{host} . $path);
-    #warn "ua get res: ".Data::Dumper->Dumper($res);
     if ($res->is_success) { # 200 OK
         return $res->decoded_content;
     } else {
@@ -92,45 +90,39 @@ sub delete {
 sub throw_exception {
     my ($self, $res) = @_;
     
-    #warn "throw_exception res: ".Data::Dumper->Dumper($res);
-    
     my $code = $res->code;
-    my $content;
+    my $content = {};
     
     try {
         $content = from_json($res->content) if $res->content;
-    } catch {
-        $content = { errors => $res->content } if $res->content;
     };
     
     if ($code == 503){
         PDFU::TemporaryError->throw(
             code => $code,
-            error => $res->message,
+            message => $res->message,
             retry_after => $res->header('retry-after')
         );
     } elsif ($code == 422){
         PDFU::InvalidRequestError->throw(
             code => $code,
-            error => $content->{message} || $res->message,
+            message => $content->{message} || $res->message,
             errors => $content->{errors}
         );
     } elsif ($code == 401){
         PDFU::AuthenticationError->throw(
             code => $code,
-            error => $content->{message} || $res->message,
-            errors => $content->{errors}
+            message => $content->{message} || $res->message,
         );
     } elsif ($code == 404){
         PDFU::NotFound->throw(
             code => $code,
-            error => $res->message,
-            errors => $content->{errors}
+            message => $res->message,
         );
     } else {
         PDFU::PDFUnicornError->throw(
             code => $code,
-            error => $res->message,
+            message => $res->message,
         );
     }
 }
