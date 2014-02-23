@@ -42,3 +42,11 @@ use Exception::Class (
         description => 'Resource Not Found',
     },
 );
+
+PDFU::Exception->Trace(1);
+
+sub PDFU::Exception::full_message {
+    my $self = shift;
+    my $msg = $self->message;
+    $msg .= "\n".join("\n", @{$self->errors}) if $self->errors;
+}
